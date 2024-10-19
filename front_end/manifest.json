@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name" : "Smart Scheduler",
+    "description": "A smart scheduler for your class registration",
+    "version": "1.0",
+    "icons" : {
+        "16": "images/icon16.png",
+        "32": "images/icon32.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
+    },
+    "action" : {
+        "default_icon" : "images/icon32.png",
+        "default_title" : "Smart Scheduler",
+        "default_popup": "popup/popup.html"
+    }
+}

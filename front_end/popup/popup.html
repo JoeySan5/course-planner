@@ -1,0 +1,57 @@
+<!-- popup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Scheduler</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #1e1e1e;
+            background-image: url('images/marble-bg.jpg'); /* 대리석 텍스처 이미지 */
+            background-size: cover;
+            background-position: center;
+            color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.6); /* 반투명 검은색 */
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        }
+        .container h2 {
+            font-size: 18px;
+            color: #eaeaea;
+            margin-bottom: 20px;
+        }
+        .agree-btn {
+            background-color: #333;
+            color: #f5f5f5;
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 10px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .agree-btn:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Allow access to your degree audit for class registration analysis?</h2>
+        <button class="agree-btn">Agree</button>
+    </div>
+</body>
+</html>
