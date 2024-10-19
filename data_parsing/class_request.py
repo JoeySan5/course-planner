@@ -5,17 +5,6 @@ import uuid  # Added to generate UUID
 # API request URL
 url = "https://reg-prod.ec.lehigh.edu/StudentRegistrationSsb/ssb/searchResults/searchResults"
 
-# Load subject codes from subject.txt file
-subjects = []
-with open("subject.txt", "r") as file:
-    for line in file:
-        try:
-            # Example: {'code': 'CSE', 'description': 'Computer Science & Engineering'}
-            subject = eval(line.strip())  # Each line is in dictionary format, so use eval()
-            subjects.append(subject['code'])  # Extract only the 'code' key value
-        except Exception as e:
-            print(f"Failed to parse line: {line}. Error: {e}")
-
 # Set headers
 headers = {
     "accept": "application/json, text/javascript, */*; q=0.01",
@@ -71,21 +60,26 @@ cookies = {
     "AWSALBCORS": "+nA8Z8mmptIcupJno4QlCmHdv1ZDz563e17DgRr+VogoqClqAnTnPyv9h8jklWVIn0KlxGx1pWlw4fYj5Jx7NbG+km2MpcTU41vh88z0+5AVIZJPndw8ZFlQ1iDB"
 }
 
-# List to store all course data
-all_courses = []
+term = "202410"
+if term[4:] == "10":
+    semester = "spring"
+else:
+    semester = "fall"
 
+filename = f"{term[:4]}_{semester}.json"
+
+# List to store all course data 
+all_courses = []
 # Request data using each subject code
-for code in subjects:
-    print(f"Fetching data for subject: {code}")
+for i in range (0, 6000, 500):
     # Set query parameters
     params = {
-        "txt_subject": code,
-        "txt_term": "202510",
+        "txt_term": term,
         "startDatepicker": "",
         "endDatepicker": "",
         "uniqueSessionId": str(uuid.uuid4()),
-        "pageOffset": "0",
-        "pageMaxSize": "300",
+        "pageOffset": i,
+        "pageMaxSize": "500",
         "sortColumn": "subjectDescription",
         "sortDirection": "asc"
     }
@@ -98,15 +92,16 @@ for code in subjects:
         try:
             response_json = response.json()
             data = response_json.get("data", [])
-            print(f"Fetched {len(data)} courses for subject {code}")
+            # print len data
+            print(len(data))
             all_courses.extend(data)  # Add to the overall data
         except json.JSONDecodeError:
-            print(f"Failed to process JSON response for subject {code}.")
+            pass
     else:
-        print(f"Request failed for subject {code}: Status code {response.status_code}")
+        pass
 
 # Save all data to a single JSON file
-with open("all_courses_data.json", "w") as f:
+with open(filename, "w") as f:
     json.dump(all_courses, f, indent=4)
 
 print("All subject data collection is complete. Saved to JSON file.")
