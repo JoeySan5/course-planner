@@ -1,0 +1,98 @@
+{'code': 'ACCT', 'description': 'Accounting'}
+{'code': 'AAS', 'description': 'Africana Studies'}
+{'code': 'ANTH', 'description': 'Anthropology'}
+{'code': 'ARAB', 'description': 'Arabic'}
+{'code': 'ARCH', 'description': 'Architecture'}
+{'code': 'ART', 'description': 'Art'}
+{'code': 'ARTS', 'description': 'Arts'}
+{'code': 'ASIA', 'description': 'Asian Studies'}
+{'code': 'ASTR', 'description': 'Astronomy'}
+{'code': 'BIOE', 'description': 'Bio Engineering'}
+{'code': 'BIOC', 'description': 'Biocomputational Engineering'}
+{'code': 'BIOS', 'description': 'Biological Sciences'}
+{'code': 'BSTA', 'description': 'Biostatistics'}
+{'code': 'BUS', 'description': 'Business'}
+{'code': 'BUAN', 'description': 'Business Analytics'}
+{'code': 'BZX', 'description': 'Business Co-Curriculum'}
+{'code': 'BIS', 'description': 'Business Information Systems'}
+{'code': 'CAT', 'description': 'Catastrophe Modeling'}
+{'code': 'CHE', 'description': 'Chemical Engineering'}
+{'code': 'CHM', 'description': 'Chemistry'}
+{'code': 'CHIN', 'description': 'Chinese'}
+{'code': 'CEE', 'description': 'Civil &amp; Environmental Engring'}
+{'code': 'COGS', 'description': 'Cognitive Science'}
+{'code': 'COMM', 'description': 'Communication'}
+{'code': 'CGH', 'description': 'Community and Global Health'}
+{'code': 'CSE', 'description': 'Computer Science &amp; Engineering'}
+{'code': 'CSB', 'description': 'Computer Science and Business'}
+{'code': 'CPSY', 'description': 'Counseling Psychology'}
+{'code': 'CINQ', 'description': 'Creative Inquiry'}
+{'code': 'DSCI', 'description': 'Data Science'}
+{'code': 'DES', 'description': 'Design'}
+{'code': 'EES', 'description': 'Earth &amp; Environmental Science'}
+{'code': 'ECK', 'description': 'Eckardt Scholar Seminar'}
+{'code': 'ECO', 'description': 'Economics'}
+{'code': 'EDUC', 'description': 'Education'}
+{'code': 'EDL', 'description': 'Education Leadership'}
+{'code': 'ECE', 'description': 'Electrical &amp; Computer Engr'}
+{'code': 'ESE', 'description': 'Energy Systems Engineering'}
+{'code': 'ENGR', 'description': 'Engineering'}
+{'code': 'ENGL', 'description': 'English'}
+{'code': 'ESLP', 'description': 'English Second Language Pgm'}
+{'code': 'ENTP', 'description': 'Entrepreneurship'}
+{'code': 'EVST', 'description': 'Environmental Studies'}
+{'code': 'EPI', 'description': 'Epidemiology'}
+{'code': 'ETH', 'description': 'Ethics'}
+{'code': 'FILM', 'description': 'Film Studies'}
+{'code': 'FIN', 'description': 'Finance'}
+{'code': 'FREN', 'description': 'French'}
+{'code': 'GERM', 'description': 'German'}
+{'code': 'GCP', 'description': 'Global Citizen Program'}
+{'code': 'GS', 'description': 'Global Studies'}
+{'code': 'GBEN', 'description': 'Grad Business Entrepreneurship'}
+{'code': 'GBUS', 'description': 'Graduate Business'}
+{'code': 'MBA', 'description': 'Graduate MBA Core'}
+{'code': 'HLTH', 'description': 'Health'}
+{'code': 'HMS', 'description': 'Health Medicine and Society'}
+{'code': 'HEBR', 'description': 'Hebrew'}
+{'code': 'HIST', 'description': 'History'}
+{'code': 'ISE', 'description': 'Industrial&amp;Systems Engineering'}
+{'code': 'IBE', 'description': 'Integrated Business &amp; Engineer'}
+{'code': 'IDEA', 'description': 'Integrated Engin &amp; Arts Scienc'}
+{'code': 'IR', 'description': 'International Relations'}
+{'code': 'JPNS', 'description': 'Japanese'}
+{'code': 'JST', 'description': 'Jewish Studies'}
+{'code': 'JOUR', 'description': 'Journalism'}
+{'code': 'LAS', 'description': 'Latin American Studies'}
+{'code': 'LAW', 'description': 'Law'}
+{'code': 'MGT', 'description': 'Management'}
+{'code': 'MKT', 'description': 'Marketing'}
+{'code': 'MAT', 'description': 'Materials Science &amp; Engr'}
+{'code': 'MATH', 'description': 'Mathematics'}
+{'code': 'ME', 'description': 'Mechanical Engineering'}
+{'code': 'MECH', 'description': 'Mechanics'}
+{'code': 'MIL', 'description': 'Military Science'}
+{'code': 'MLL', 'description': 'Modern Languages &amp; Literatures'}
+{'code': 'MUS', 'description': 'Music'}
+{'code': 'PHIL', 'description': 'Philosophy'}
+{'code': 'PHY', 'description': 'Physics'}
+{'code': 'POLS', 'description': 'Political Science'}
+{'code': 'POPH', 'description': 'Population Health'}
+{'code': 'PMGT', 'description': 'Project Management'}
+{'code': 'PSYC', 'description': 'Psychology'}
+{'code': 'PUBH', 'description': 'Public Health'}
+{'code': 'REAL', 'description': 'Real Estate'}
+{'code': 'REL', 'description': 'Religion, Culture and Society'}
+{'code': 'RUSS', 'description': 'Russian'}
+{'code': 'SCHP', 'description': 'School Psychology'}
+{'code': 'SOC', 'description': 'Sociology'}
+{'code': 'SPAN', 'description': 'Spanish'}
+{'code': 'SPED', 'description': 'Special Education'}
+{'code': 'STAT', 'description': 'Statistics'}
+{'code': 'SCM', 'description': 'Supply Chain Management'}
+{'code': 'TLT', 'description': 'Teaching Learning Technology'}
+{'code': 'TRAC', 'description': 'Tech, Resrch &amp; Communications'}
+{'code': 'TE', 'description': 'Technical Entrepreneurship'}
+{'code': 'THTR', 'description': 'Theatre'}
+{'code': 'WGSS', 'description': 'Women,Gender&amp;Sexuality Studies'}
+{'code': 'WRT', 'description': 'Writing'}
