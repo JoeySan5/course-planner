@@ -10,6 +10,9 @@ def predict_offered_terms(historic_course_terms):
 
     # historic_course_terms = [202010, 202040, 202140, 202240, 202410, 202440]
     historic_course_terms.sort()
+    # If the course hasn't been offered since 2019, we assume it will not be offered in the future
+    if len(historic_course_terms) == 0:
+        return []
     offered_since = historic_course_terms[0]
 
     spring_suffix = 10
