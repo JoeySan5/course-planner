@@ -235,7 +235,7 @@ def generate_course_json(final_remaining_courses, selected_semesters):
         sorted_semesters = sorted(list(all_semesters))
 
         all_prereqs = set()
-         # Fetch prereqs from course_semester table
+        # Fetch prereqs from course_semester table
         curr.execute("SELECT * FROM prereq WHERE courseid = %s", (course_id,))
         prereqs = [(row[1],row[2]) for row in curr.fetchall()]
         if prereqs:
@@ -248,7 +248,7 @@ def generate_course_json(final_remaining_courses, selected_semesters):
                 else:
                     all_prereqs.add(prereq[1])
             
-            sorted_prereqs = sorted(list(all_prereqs))
+        sorted_prereqs = sorted(list(all_prereqs))
 
 
         # Create course JSON object
@@ -291,12 +291,13 @@ def add_courses_from_json(planner, courses_data):
     for course_data in courses_data:
         course = courses_dict[course_data["courseID"]]
         for prereq_id in course_data["prerequisites"]:
-            course.add_prerequisite(courses_dict[prereq_id])
+            if prereq_id in courses_dict:
+                course.add_prerequisite(courses_dict[prereq_id])
 
 def get_output_json_from_schedule(schedule):
     # Iterate through planner.course_schedule and build a 2D array
     course_schedule_json = []
-    for semester in planner.semester_schedules:
+    for semester in schedule:
         semester_courses = []
         for course in semester:
             # Assuming course is an object, you can extract its attributes
@@ -405,9 +406,8 @@ def requirements_calculation():
 
     with open(output_file_path, 'w') as json_file:
         json.dump(final_json, json_file, indent=4)  # indent for pretty printing
-
-
-    return 
+        
+    return out_json
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)

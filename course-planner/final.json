@@ -1,23 +1,12 @@
 [
     {
-        "courseID": "CSE303",
-        "department": "CSE",
-        "number": "303",
-        "title": "CSE303",
+        "courseID": "WRT002",
+        "department": "WRT",
+        "number": "002",
+        "title": "WRT002",
         "credits": 3,
         "attributes": [],
         "semesters": [
-            "201910",
-            "201940",
-            "202010",
-            "202040",
-            "202110",
-            "202140",
-            "202210",
-            "202240",
-            "202310",
-            "202340",
-            "202410",
             "202440",
             "202510",
             "202540",
@@ -28,45 +17,29 @@
             "202810",
             "202840"
         ],
-        "prerequisites": [
-            "CSE109",
-            "CSE202",
-            "ECE201"
-        ]
+        "prerequisites": []
     },
     {
-        "courseID": "PHY012",
-        "department": "PHY",
-        "number": "012",
-        "title": "PHY012",
-        "credits": 1,
+        "courseID": "ENGR005",
+        "department": "ENGR",
+        "number": "005",
+        "title": "ENGR005",
+        "credits": 2,
         "attributes": [],
         "semesters": [
-            "201910",
             "201940",
-            "202010",
             "202040",
-            "202110",
             "202140",
-            "202210",
             "202240",
-            "202310",
             "202340",
-            "202410",
             "202440",
             "202510",
             "202540",
-            "202610",
             "202640",
-            "202710",
             "202740",
-            "202810",
             "202840"
         ],
-        "prerequisites": [
-            "PHY010",
-            "PHY011"
-        ]
+        "prerequisites": []
     },
     {
         "courseID": "CSE340",
@@ -102,10 +75,10 @@
         ]
     },
     {
-        "courseID": "ENGR005",
-        "department": "ENGR",
-        "number": "005",
-        "title": "ENGR005",
+        "courseID": "CSE281",
+        "department": "CSE",
+        "number": "281",
+        "title": "CSE281",
         "credits": 2,
         "attributes": [],
         "semesters": [
@@ -122,10 +95,41 @@
             "202840"
         ],
         "prerequisites": [
-            "CSE017",
-            "CSE140",
-            "MATH021",
-            "MATH076"
+            "CSE280"
+        ]
+    },
+    {
+        "courseID": "PHY012",
+        "department": "PHY",
+        "number": "012",
+        "title": "PHY012",
+        "credits": 1,
+        "attributes": [],
+        "semesters": [
+            "201910",
+            "201940",
+            "202010",
+            "202040",
+            "202110",
+            "202140",
+            "202210",
+            "202240",
+            "202310",
+            "202340",
+            "202410",
+            "202440",
+            "202510",
+            "202540",
+            "202610",
+            "202640",
+            "202710",
+            "202740",
+            "202810",
+            "202840"
+        ],
+        "prerequisites": [
+            "PHY010",
+            "PHY011"
         ]
     },
     {
@@ -165,13 +169,24 @@
         ]
     },
     {
-        "courseID": "WRT002",
-        "department": "WRT",
-        "number": "002",
-        "title": "WRT002",
+        "courseID": "CSE303",
+        "department": "CSE",
+        "number": "303",
+        "title": "CSE303",
         "credits": 3,
         "attributes": [],
         "semesters": [
+            "201910",
+            "201940",
+            "202010",
+            "202040",
+            "202110",
+            "202140",
+            "202210",
+            "202240",
+            "202310",
+            "202340",
+            "202410",
             "202440",
             "202510",
             "202540",
@@ -183,34 +198,9 @@
             "202840"
         ],
         "prerequisites": [
-            "MATH021",
-            "MATH051",
-            "MATH075",
-            "MATH076"
-        ]
-    },
-    {
-        "courseID": "CSE281",
-        "department": "CSE",
-        "number": "281",
-        "title": "CSE281",
-        "credits": 2,
-        "attributes": [],
-        "semesters": [
-            "201940",
-            "202040",
-            "202140",
-            "202240",
-            "202340",
-            "202440",
-            "202510",
-            "202540",
-            "202640",
-            "202740",
-            "202840"
-        ],
-        "prerequisites": [
-            "CSE280"
+            "CSE109",
+            "CSE202",
+            "ECE201"
         ]
     },
     {
@@ -223,9 +213,7 @@
         "semesters": [
             "202510"
         ],
-        "prerequisites": [
-            "CSE280"
-        ]
+        "prerequisites": []
     },
     {
         "courseID": "HSS_B",
@@ -237,9 +225,7 @@
         "semesters": [
             "202510"
         ],
-        "prerequisites": [
-            "CSE280"
-        ]
+        "prerequisites": []
     },
     {
         "courseID": "HSS_C",
@@ -251,9 +237,7 @@
         "semesters": [
             "202510"
         ],
-        "prerequisites": [
-            "CSE280"
-        ]
+        "prerequisites": []
     },
     {
         "courseID": "SCI_TECH_A",
@@ -265,9 +249,7 @@
         "semesters": [
             "202510"
         ],
-        "prerequisites": [
-            "CSE280"
-        ]
+        "prerequisites": []
     },
     {
         "courseID": "CSE_ELEC_A",
@@ -279,9 +261,7 @@
         "semesters": [
             "202510"
         ],
-        "prerequisites": [
-            "CSE280"
-        ]
+        "prerequisites": []
     },
     {
         "courseID": "CSE_ELEC_B",
@@ -293,9 +273,7 @@
         "semesters": [
             "202510"
         ],
-        "prerequisites": [
-            "CSE280"
-        ]
+        "prerequisites": []
     },
     {
         "courseID": "CSE_ELEC_C",
@@ -307,8 +285,6 @@
         "semesters": [
             "202510"
         ],
-        "prerequisites": [
-            "CSE280"
-        ]
+        "prerequisites": []
     }
 ]
