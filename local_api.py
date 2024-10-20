@@ -392,6 +392,11 @@ def requirements_calculation():
     final_remaining_courses = build_tuple_list(mock_data['remainingCourses'], mock_data['dummySubjects'])
     final_json = generate_course_json(final_remaining_courses, [202510])
     print("--------------------------------------") 
+    # # Specify the path to the output JSON file
+    # input_file_path = 'course-planner/final.json'  # Change this to your desired file path
+    # with open(input_file_path, 'w') as json_file:
+    #     json.dump(final_json, json_file, indent=4)  # indent for pretty printing
+    
     print("Final Remaining Courses:", final_json)
     start_semester = 202510
     end_semester = 202610
@@ -401,9 +406,8 @@ def requirements_calculation():
     add_courses_from_json(planner, final_json)
     planner.build_graph()
     out_json = get_output_json_from_schedule(planner.choose_schedule())
-    # Specify the path to the output JSON file
-    output_file_path = 'course-planner/final.json'  # Change this to your desired file path
 
+    output_file_path = 'course-planner/output-final.json'
     with open(output_file_path, 'w') as json_file:
         json.dump(final_json, json_file, indent=4)  # indent for pretty printing
         
