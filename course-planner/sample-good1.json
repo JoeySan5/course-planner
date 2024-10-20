@@ -1,0 +1,354 @@
+[
+    {
+        "courseID": "CSE007",
+        "department": "CSE",
+        "number": "007",
+        "title": "intro programming",
+        "credits": 4,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": []
+    },
+    {
+        "courseID": "CSE017",
+        "department": "CSE",
+        "number": "017",
+        "title": "data structures",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE007"
+        ]
+    },
+    {
+        "courseID": "CSE042",
+        "department": "CSE",
+        "number": "042",
+        "title": "game design",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": []
+    },
+    {
+        "courseID": "CSE109",
+        "department": "CSE",
+        "number": "109",
+        "title": "systems software",
+        "credits": 4,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE017"
+        ]
+    },
+    {
+        "courseID": "CSE127",
+        "department": "CSE",
+        "number": "127",
+        "title": "survey of AI",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE007"
+        ]
+    },
+    {
+        "courseID": "CSE140",
+        "department": "CSE",
+        "number": "140",
+        "title": "discrete structs and algorithms",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE017"
+        ]
+    },
+    {
+        "courseID": "CSE202",
+        "department": "CSE",
+        "number": "202",
+        "title": "computer architecture",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE007"
+        ]
+    },
+    {
+        "courseID": "CSE216",
+        "department": "CSE",
+        "number": "216",
+        "title": "SWE",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE017"
+        ]
+    },
+    {
+        "courseID": "CSE241",
+        "department": "CSE",
+        "number": "241",
+        "title": "databases",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE017"
+        ]
+    },
+    {
+        "courseID": "CSE242",
+        "department": "CSE",
+        "number": "242",
+        "title": "blockchain",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE109"
+        ]
+    },
+    {
+        "courseID": "CSE303",
+        "department": "CSE",
+        "number": "303",
+        "title": "operating systems",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE109",
+            "CSE202"
+        ]
+    },
+    {
+        "courseID": "CSE340",
+        "department": "CSE",
+        "number": "340",
+        "title": "algorithms",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE140"
+        ]
+    },
+    {
+        "courseID": "MATH021",
+        "department": "MATH",
+        "number": "021",
+        "title": "Calc I",
+        "credits": 4,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": []
+    },
+    {
+        "courseID": "MATH022",
+        "department": "MATH",
+        "number": "022",
+        "title": "Calc II",
+        "credits": 4,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": ["MATH021"]
+    },
+    {
+        "courseID": "MATH023",
+        "department": "MATH",
+        "number": "023",
+        "title": "Calc III",
+        "credits": 4,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": ["MATH022"]
+    },
+    {
+        "courseID": "ENG101",
+        "department": "ENG",
+        "number": "101",
+        "title": "English Literature",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610
+        ],
+        "prerequisites": []
+    }
+]
