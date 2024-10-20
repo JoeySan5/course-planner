@@ -1,7 +1,7 @@
 // background.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.html) {
-        console.log('Received HTML:', request.html);
+    if (request.courses) {
+        console.log('Received Courses:', request.courses);
     }
     if (request.showPopup) {
         chrome.action.openPopup();

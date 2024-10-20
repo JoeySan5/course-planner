@@ -14,7 +14,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://degreeaudit.lehigh.edu:8445/selfservice-batch/audit/*"],
+            "matches": ["https://degreeaudit.lehigh.edu:8445/selfservice-batch/audit/read.html?id=JobQueueRun*"],
             "js": ["content.js"]
         }
     ],

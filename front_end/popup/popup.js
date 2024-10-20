@@ -16,14 +16,42 @@ function convertSemesterToNumber(semester) {
 
 function fetchHTML() {
     console.log("fetchHTML function called");
+
+    // 전체 HTML 콘텐츠 가져오기
     const htmlContent = document.documentElement.outerHTML;
     console.log(htmlContent);
-    chrome.runtime.sendMessage({ html: htmlContent });
+
+    // HTML 구조에서 원하는 과목명 추출
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, "text/html");
+
+    // 'takenCourse'와 'takenCourse ip' 클래스 행들을 선택
+    const takenCourses = doc.querySelectorAll('tr.takenCourse, tr.takenCourse.ip');
+
+    // 과목명을 저장할 Set (중복 제거)
+    let courseNamesSet = new Set();
+
+    // 각 행을 순회하며 과목명을 추출
+    takenCourses.forEach((row) => {
+        const courseTd = row.querySelector('td.course');
+        if (courseTd) {
+            // 공백 제거 후 과목명 추가
+            const courseName = courseTd.textContent.trim().replace(/\s+/g, '');
+            courseNamesSet.add(courseName);
+        }
+    });
+
+    // Set을 배열로 변환하여 콘솔에 출력
+    const courseNames = Array.from(courseNamesSet);
+    console.log(courseNames);
+
+    // chrome runtime으로 과목명 데이터도 함께 전송
+    chrome.runtime.sendMessage({ html: htmlContent, courses: courseNames });
 }
 
 function showTermSetupView(startSemester, endSemester) {
     console.log("showTermSetupView called with:", startSemester, endSemester);
-    
+
     const questionnaireView = document.getElementById('questionnaire-view');
     const termSetupView = document.getElementById('term-setup-view');
     const termContainer = document.getElementById('term-container');
@@ -43,7 +71,7 @@ function showTermSetupView(startSemester, endSemester) {
     allSemesters.forEach(semester => {
         const semesterNum = convertSemesterToNumber(semester);
         console.log("Processing semester:", semester, "Number:", semesterNum);
-        
+
         if (semesterNum >= startNum && semesterNum <= endNum) {
             const termDiv = document.createElement('div');
             termDiv.className = 'input-group';
@@ -54,7 +82,7 @@ function showTermSetupView(startSemester, endSemester) {
             const select = document.createElement('select');
             select.name = `credits-${semester}`;
             select.id = `credits-${semester}`;
-            
+
             for (let i = 12; i <= 21; i++) {
                 const option = document.createElement('option');
                 option.value = i;
@@ -68,7 +96,7 @@ function showTermSetupView(startSemester, endSemester) {
             termDiv.appendChild(label);
             termDiv.appendChild(select);
             termContainer.appendChild(termDiv);
-            
+
             semestersAdded++;
         }
     });
@@ -81,24 +109,39 @@ function showTermSetupView(startSemester, endSemester) {
         noOptionMessage.style.color = '#fff';
         termContainer.appendChild(noOptionMessage);
     } else {
-        // 컨테이너 생성 후 스크롤을 맨 위로 이동
         setTimeout(() => {
             termContainer.scrollTop = 0;
         }, 0);
     }
 }
+    document.querySelector('.close-btn').addEventListener('click', () => {
+        document.body.style.visibility = 'hidden';
+        document.body.style.opacity = 0;
+        document.body.style.transition = 'visibility 0s 0.3s, opacity 0.3s linear';
 
-document.addEventListener('DOMContentLoaded', () => {
-    const agreeBtn = document.getElementById('agreeBtn');
-    const tagInput = document.getElementById('electives');
-    const tagContainer = tagInput.parentNode;
-    const startSemesterSelect = document.getElementById('start-semester');
-    const graduationGroup = document.getElementById('graduation-group');
-    const endSemesterSelect = document.getElementById('end-semester');
-    const nextButton = document.getElementById('submitPreferences');
+        setTimeout(() => {
+            document.body.style.display = 'none';
+        }, 300); 
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+        const agreeBtn = document.getElementById('agreeBtn');
+        const tagInput = document.getElementById('electives');
+        const tagContainer = tagInput.parentNode;
+        const startSemesterSelect = document.getElementById('start-semester');
+        const graduationGroup = document.getElementById('graduation-group');
+        const endSemesterSelect = document.getElementById('end-semester');
+        const nextButton = document.getElementById('submitPreferences');
+        let extractedCourses = [];
+
+    // 크롤링한 데이터 받기
+    chrome.runtime.onMessage.addListener((request) => {
+        if (request.courses) {
+            extractedCourses = request.courses;
+            console.log("Extracted courses:", extractedCourses);
+        }
+    });
 
     agreeBtn.addEventListener('click', () => {
-        // 현재 페이지 HTML 가져오기
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             chrome.scripting.executeScript({
                 target: { tabId: tabs[0].id },
@@ -154,10 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 초기 버튼 상태 설정
     checkButtonState();
 
-    startSemesterSelect.addEventListener('change', function() {
+    startSemesterSelect.addEventListener('change', function () {
         const startSemester = this.value;
         const startSemesterNumber = convertSemesterToNumber(startSemester);
-        
+
         endSemesterSelect.innerHTML = '';
 
         if (startSemester) {
@@ -187,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
         checkButtonState();
     });
 
-    // end-semester 선택 시 이벤트
     endSemesterSelect.addEventListener('change', checkButtonState);
 
     // "Next" 버튼 클릭 이벤트
@@ -196,31 +238,77 @@ document.addEventListener('DOMContentLoaded', () => {
         const startSemester = startSemesterSelect.value;
         const endSemester = endSemesterSelect.value;
 
-        const userPreferences = {
-            electives,
-            startSemester,
-            endSemester
-        };
-
-        console.log("User preferences:", userPreferences);
-
-        showTermSetupView(startSemester, endSemester);
+        if (startSemester && endSemester) {
+            showTermSetupView(startSemester, endSemester);
+        }
     });
 
     // Submit 버튼의 이벤트 리스너 추가
     const submitButton = document.getElementById('finalizeSchedule');
     submitButton.addEventListener('click', function() {
-        const selectedCredits = {};
-        document.querySelectorAll('#term-container select').forEach(select => {
-            selectedCredits[select.name.replace('credits-', '')] = select.value;
-        });
-        console.log('Selected credits:', selectedCredits);
-        // 여기에 선택된 크레딧을 처리하는 로직을 추가할 수 있습니다.
+    const selectedCredits = {};
+    document.querySelectorAll('#term-container select').forEach(select => {
+        selectedCredits[select.name.replace('credits-', '')] = select.value;
+    });
+
+    // 모든 데이터를 JSON으로 정리
+    const finalData = {
+        takenCourses: extractedCourses,
+        startSemester: startSemesterSelect.value,
+        endSemester: endSemesterSelect.value,
+        selectedCredits: selectedCredits,
+        userPreferences: Array.from(document.querySelectorAll('.tag')).map(tag => tag.textContent.trim())
+    };
+
+    console.log('Final Data:', JSON.stringify(finalData, null, 2));
+
+    // "Analyzing..." 프롬프트 표시
+    const analyzingPrompt = document.createElement('div');
+    analyzingPrompt.id = 'analyzing-prompt';
+    analyzingPrompt.style.position = 'fixed';
+    analyzingPrompt.style.top = '50%';
+    analyzingPrompt.style.left = '50%';
+    analyzingPrompt.style.transform = 'translate(-50%, -50%)';
+    analyzingPrompt.style.padding = '20px';
+    analyzingPrompt.style.backgroundColor = '#000';
+    analyzingPrompt.style.color = '#fff';
+    analyzingPrompt.style.borderRadius = '8px';
+    analyzingPrompt.style.boxShadow = '0 0 15px rgba(0,0,0,0.5)';
+    analyzingPrompt.style.fontSize = '18px';
+    analyzingPrompt.style.textAlign = 'center';
+    analyzingPrompt.textContent = 'Analyzing...';
+
+    document.body.appendChild(analyzingPrompt);
+
+    // ec2 sending
+    const ec2Url = 'https://your-ec2-instance.amazonaws.com/your-endpoint'; // acutal url
+    fetch(ec2Url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(finalData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        alert('Data successfully sent to EC2');
+    })
+    .catch(error => {
+        console.error('Error sending data to EC2:', error);
+        alert('Failed to send data to EC2');
+    })
+    .finally(() => {
+        // "Analyzing..." 프롬프트 제거
+        if (analyzingPrompt) {
+            analyzingPrompt.remove();
+        }
     });
 });
 
-// 창 닫기 버튼 이벤트
-document.querySelector('.close-btn').addEventListener('click', () => {
-    window.close();
-    document.body.style.display = 'none';
 });
