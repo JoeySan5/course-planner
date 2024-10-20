@@ -51,20 +51,17 @@ class Graph:
             parents = [self.root]
         new_node = self.Node(data, parents)
         self.id_set.add(data.courseID)
-        print(f"Added course {data.courseID} in graph.")
+        # print(f"Added course {data.courseID} in graph.")
         for parent in parents:
             parent.add_child(new_node)
         self.nodes.append(new_node)
         self.size += 1
-        print(f"Course {data.courseID} added!")
 
     def select_node(self, node):
         node.selected = True
     
     def all_predecessors_selected(self, node):
-        print(f"here123 {node.data.courseID}")
         for parent in node.parents:
-            print(f"here1234 {node.data.courseID}")
             if parent.selected == False:
                 return False
         return True

@@ -96,36 +96,7 @@ class CoursePlanner:
 
     def choose_schedule_for_semester(self, i, semester):
         # Find not-yet-selected courses offered this semester
-        courses_for_semester = [node for node in self.course_graph.nodes if (not node.selected and node.data.offered_in_semester(semester))]
-        
-        for node in courses_for_semester:
-            print(f"Course {node.data.courseID} may be chosen for semester {i}, has {len(node.parents)} parents")
-        
-        # Filter out courses with unmet prerequisites
-        for course_node in courses_for_semester:
-            if course_node.parents is not None:
-                for parent in course_node.parents:
-                    # print(f"Parent {parent.data.courseID} of {course_node.data.courseID} has selected {parent.selected}")
-                    if not parent.selected:
-                        print(f"Course {course_node.data.courseID} has unmet prerequisite {parent.data.courseID}")
-                        courses_for_semester.remove(course_node)
-                        break
-            # If any prerequisite is unmet, remove the course from the list of options for this semester
-            # if not self.course_graph.all_predecessors_selected(course_node):
-            #     print(f"{i}Course {course_node.data.courseID} has unmet prerequisite")
-            #     courses_for_semester.remove(course_node)
-
-        # Filter out courses with unmet prerequisites
-        # for course_node in courses_for_semester:
-        #     # If any prerequisite is unmet, remove the course from the list of options for this semester
-        #     if not self.course_graph.all_predecessors_selected(course_node):
-        #         print(f"{i}Course {course_node.data.courseID} has unmet prerequisite")
-        #         courses_for_semester.remove(course_node)
-
-        # Debugging:
-        for node in courses_for_semester:
-            print(f"Course {node.data.courseID}")
-        print(f"may be chosen for semester {i}")
+        courses_for_semester = [node for node in self.course_graph.nodes if (not node.selected and node.data.offered_in_semester(semester) and self.course_graph.all_predecessors_selected(node))]
         
         # Sort courses by height
         courses_for_semester.sort(key=lambda course: self.course_graph.height_heuristic(course), reverse=True)
@@ -148,7 +119,6 @@ class CoursePlanner:
     # Output
 
     def print_academic_plan(self):
-        print(self.semester_schedules)
         for i, semester in enumerate(self.semester_domain):
             print(f"\n-----Semester {semester}-----({self.scheduled_credits[i]} credits)")
             for course in self.semester_schedules[i]:
@@ -159,7 +129,7 @@ class CoursePlanner:
 
 def main():
     # Load courses from a JSON file
-    with open('sample-good3.json', 'r') as file:
+    with open('sample-courses-1.json', 'r') as file:
         courses_data = json.load(file)
 
     MIN_CREDITS = 12
@@ -190,10 +160,8 @@ def main():
         for prereq_id in course_data["prerequisites"]:
             course.add_prerequisite(courses_dict[prereq_id])
 
-    planner.print_debug()
-    # return
+    # planner.print_debug()
     planner.build_graph()
-    print("done building")
 
     planner.choose_schedule()
 

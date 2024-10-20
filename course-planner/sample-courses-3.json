@@ -100,5 +100,28 @@
             202610
         ],
         "prerequisites": ["MATH021"]
+    },
+    {
+        "courseID": "CSE202",
+        "department": "CSE",
+        "number": "202",
+        "title": "computer architecture",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE007"
+        ]
     }
 ]
