@@ -25,6 +25,12 @@ class Graph:
 
     def contains(self, data):
         return data.courseID in self.id_set
+    
+    def been_selected(self, data):
+        if data.courseID in self.id_set:
+            for node in self.nodes:
+                if node.data.courseID == data.courseID:
+                    return node.selected
 
     def find_parents(self, parent_data_list):
         parents = []
@@ -50,9 +56,18 @@ class Graph:
             parent.add_child(new_node)
         self.nodes.append(new_node)
         self.size += 1
+        print(f"Course {data.courseID} added!")
 
     def select_node(self, node):
         node.selected = True
+    
+    def all_predecessors_selected(self, node):
+        print(f"here123 {node.data.courseID}")
+        for parent in node.parents:
+            print(f"here1234 {node.data.courseID}")
+            if parent.selected == False:
+                return False
+        return True
 
     def height_heuristic(self, node):
         return node.height

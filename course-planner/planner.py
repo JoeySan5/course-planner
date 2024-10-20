@@ -11,6 +11,7 @@ class CoursePlanner:
         self.end_semester = end_semester
         self.semester_domain = self.find_semester_domain(start_semester, end_semester)
         self.semester_schedules = [[] for _ in range(len(self.semester_domain))]
+        self.scheduled_credits = [0] * len(self.semester_domain)
         if min_credits_per_semester >= max_credits_per_semester:
             raise ValueError("Minimum credits per semester must be less than maximum credits per semester")
         self.min_credits_per_semester = min_credits_per_semester
@@ -55,7 +56,6 @@ class CoursePlanner:
             print(f"Course with ID {course.courseID} already exists. Not adding duplicate.")
             return
         self.courses.append(course)
-        print(f"Course {course.courseID} added.")
 
     def remove_course(self, courseID):
         self.courses = [course for course in self.courses if course.courseID != courseID]
@@ -73,39 +73,59 @@ class CoursePlanner:
         self.course_graph = Graph()
         courses_to_schedule = self.courses
         for course in courses_to_schedule:
-            self.add_course_as_node(course, courses_to_schedule)
+            self.add_course_as_node(course)
 
-    def add_course_as_node(self, course, courses_to_schedule):
+    def add_course_as_node(self, course):
         if self.course_graph.contains(course):
             return
         if course.prerequisites == []:
             self.course_graph.add_node(course)
             return
         else:
-            print(f" course {course.courseID} has {len(course.prerequisites)} prereqs", flush=True)
             for prereq in course.prerequisites:
-                self.add_course_as_node(prereq, courses_to_schedule)
+                self.add_course_as_node(prereq)
             self.course_graph.add_node(course, course.prerequisites)
 
     # Step 3 functions: Choose a schedule from the graph
 
     def choose_schedule(self):
-        for semester in self.semester_domain:
-            print(f"Choosing schedule for semester {semester}")
-            self.choose_schedule_for_semester(semester)
+        for i, semester in enumerate(self.semester_domain):
+            print(f"\nChoosing schedule for semester {semester}")
+            self.choose_schedule_for_semester(i, semester)
         return self.semester_schedules
 
-    def choose_schedule_for_semester(self, semester):
+    def choose_schedule_for_semester(self, i, semester):
         # Find not-yet-selected courses offered this semester
         courses_for_semester = [node for node in self.course_graph.nodes if (not node.selected and node.data.offered_in_semester(semester))]
+        
+        for node in courses_for_semester:
+            print(f"Course {node.data.courseID} may be chosen for semester {i}, has {len(node.parents)} parents")
+        
         # Filter out courses with unmet prerequisites
         for course_node in courses_for_semester:
             if course_node.parents is not None:
-                for prereq in course_node.parents:
-                    if not prereq.selected:
+                for parent in course_node.parents:
+                    # print(f"Parent {parent.data.courseID} of {course_node.data.courseID} has selected {parent.selected}")
+                    if not parent.selected:
+                        print(f"Course {course_node.data.courseID} has unmet prerequisite {parent.data.courseID}")
                         courses_for_semester.remove(course_node)
+                        break
+            # If any prerequisite is unmet, remove the course from the list of options for this semester
+            # if not self.course_graph.all_predecessors_selected(course_node):
+            #     print(f"{i}Course {course_node.data.courseID} has unmet prerequisite")
+            #     courses_for_semester.remove(course_node)
 
-        print(courses_for_semester)
+        # Filter out courses with unmet prerequisites
+        # for course_node in courses_for_semester:
+        #     # If any prerequisite is unmet, remove the course from the list of options for this semester
+        #     if not self.course_graph.all_predecessors_selected(course_node):
+        #         print(f"{i}Course {course_node.data.courseID} has unmet prerequisite")
+        #         courses_for_semester.remove(course_node)
+
+        # Debugging:
+        for node in courses_for_semester:
+            print(f"Course {node.data.courseID}")
+        print(f"may be chosen for semester {i}")
         
         # Sort courses by height
         courses_for_semester.sort(key=lambda course: self.course_graph.height_heuristic(course), reverse=True)
@@ -122,14 +142,15 @@ class CoursePlanner:
                 credits += course.credits
                 if credits == self.max_credits_per_semester:
                     break
-        self.semester_schedules[self.semester_domain.index(semester)] = schedule
+        self.scheduled_credits[i] = credits
+        self.semester_schedules[i] = schedule
 
     # Output
 
     def print_academic_plan(self):
         print(self.semester_schedules)
         for i, semester in enumerate(self.semester_domain):
-            print(f"\n-----Semester {semester}-----")
+            print(f"\n-----Semester {semester}-----({self.scheduled_credits[i]} credits)")
             for course in self.semester_schedules[i]:
                 print(course)
 
@@ -138,7 +159,7 @@ class CoursePlanner:
 
 def main():
     # Load courses from a JSON file
-    with open('sample-good2.json', 'r') as file:
+    with open('sample-good3.json', 'r') as file:
         courses_data = json.load(file)
 
     MIN_CREDITS = 12
@@ -172,20 +193,11 @@ def main():
     planner.print_debug()
     # return
     planner.build_graph()
-
     print("done building")
 
     planner.choose_schedule()
 
-
     planner.print_academic_plan()
-
-    # schedule = planner.choose_schedule()
-    # print("Chosen Schedule:")
-    # for semester, courses in zip(planner.semesters, schedule):
-    #     print(f"Semester {semester}:")
-    #     for course in courses:
-    #         print(f"  {course.courseID} - {course.title}")
 
 if __name__ == "__main__":
     main()
