@@ -78,7 +78,7 @@ class CoursePlanner:
 
     def add_course_as_node(self, course, courses_to_schedule):
         if course.prerequisites == []:
-            self.course_graph.add_node(course, [self.course_graph.root])
+            self.course_graph.add_node(course)
             print(f"Added course {course.courseID} in graph.")
             return
         else:
@@ -168,7 +168,7 @@ def main():
             course.add_prerequisite(courses_dict[prereq_id])
 
     planner.print_debug()
-    return
+    # return
     planner.build_graph()
 
     print("done building")

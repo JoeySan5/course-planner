@@ -8,7 +8,6 @@ class Graph:
             self.selected = False
 
         def add_child(self, child_node):
-            child_node.parents.append(self)
             self.children.append(child_node)
             child_node.height = self.height + 1
 
@@ -19,6 +18,7 @@ class Graph:
 
     def __init__(self):
         self.root = self.Node(None)
+        self.root.selected = True
         self.nodes = [self.root]
         self.size = 1
 
@@ -31,10 +31,10 @@ class Graph:
                     break
         return parents
 
-    def add_node(self, data, parent_data_list=None):
+    def add_node(self, data, parent_data_list=[]):
         parents = self.find_parents(parent_data_list) if parent_data_list else []
         if parents == []:
-            parents = self.root
+            parents = [self.root]
         new_node = self.Node(data, parents)
         for parent in parents:
             parent.add_child(new_node)
@@ -54,7 +54,7 @@ class Graph:
     # def subtree_heuristic(self, node):
     #     return node.height + len(node.children)
     
-    def leftover_semesters_heuristic(self, node, semesters):
+    def remaining_semesters_heuristic(self, node, semesters):
         course = node.data
         return len([semester for semester in semesters if course.offered_in_semester(semester)])
 
