@@ -1,0 +1,127 @@
+[
+    {
+        "courseID": "CSE140",
+        "department": "CSE",
+        "number": "140",
+        "title": "discrete structs and algorithms",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE017"
+        ]
+    },
+    {
+        "courseID": "CSE007",
+        "department": "CSE",
+        "number": "007",
+        "title": "intro programming",
+        "credits": 4,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": []
+    },
+    {
+        "courseID": "CSE017",
+        "department": "CSE",
+        "number": "017",
+        "title": "data structures",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE007"
+        ]
+    },
+    {
+        "courseID": "MATH021",
+        "department": "MATH",
+        "number": "021",
+        "title": "Calc I",
+        "credits": 4,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": []
+    },
+    {
+        "courseID": "MATH022",
+        "department": "MATH",
+        "number": "022",
+        "title": "Calc II",
+        "credits": 4,
+        "attributes": [],
+        "semesters": [
+            202510,
+            202540,
+            202610
+        ],
+        "prerequisites": ["MATH021"]
+    },
+    {
+        "courseID": "CSE202",
+        "department": "CSE",
+        "number": "202",
+        "title": "computer architecture",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE007"
+        ]
+    }
+]
