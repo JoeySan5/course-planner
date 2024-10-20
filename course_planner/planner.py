@@ -1,5 +1,6 @@
-from graph import Graph
-from course import Course
+from flask import jsonify
+from course_planner.graph import Graph
+from course_planner.course import Course
 
 import json
 
@@ -165,8 +166,9 @@ def main():
 
     planner.choose_schedule()
 
-    planner.print_academic_plan()
+    # planner.print_academic_plan()
 
+    return jsonify(planner.semester_schedules)
 if __name__ == "__main__":
     main()
 
