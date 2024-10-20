@@ -237,16 +237,17 @@ def generate_course_json(final_remaining_courses, selected_semesters):
          # Fetch prereqs from course_semester table
         curr.execute("SELECT * FROM prereq WHERE courseid = %s", (course_id,))
         prereqs = [(row[1],row[2]) for row in curr.fetchall()]
-        groupNum = prereq[0][0]
-        all_prereqs.add(prereqs[0][1])
-        for prereq in prereqs:
-            currGroupNum = prereq[0]
-            if currGroupNum == groupNum:
-                continue
-            else:
-                all_prereqs.add(prereq[1])
-        
-        sorted_prereqs = sorted(list(all_prereqs))
+        if prereqs:
+            groupNum = prereq[0][0]
+            all_prereqs.add(prereqs[0][1])
+            for prereq in prereqs:
+                currGroupNum = prereq[0]
+                if currGroupNum == groupNum:
+                    continue
+                else:
+                    all_prereqs.add(prereq[1])
+            
+            sorted_prereqs = sorted(list(all_prereqs))
 
 
         # Create course JSON object
