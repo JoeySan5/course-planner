@@ -70,7 +70,10 @@ class Graph:
         return node.height
     
     def children_heuristic(self, node):
-        return node.children
+        return len(node.children)
+    
+    def super_heuristic(self, node):
+        return self.height_heuristic(node) + self.children_heuristic(node)
     
     # TODO: implement this heuristic
     # def subtree_heuristic(self, node):
