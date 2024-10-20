@@ -1,5 +1,28 @@
 [
     {
+        "courseID": "CSE140",
+        "department": "CSE",
+        "number": "140",
+        "title": "discrete structs and algorithms",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE017"
+        ]
+    },
+    {
         "courseID": "CSE007",
         "department": "CSE",
         "number": "007",
@@ -41,29 +64,6 @@
         ],
         "prerequisites": [
             "CSE007"
-        ]
-    },
-    {
-        "courseID": "CSE140",
-        "department": "CSE",
-        "number": "140",
-        "title": "discrete structs and algorithms",
-        "credits": 3,
-        "attributes": [],
-        "semesters": [
-            202410,
-            202440,
-            202510,
-            202540,
-            202610,
-            202640,
-            202710,
-            202740,
-            202810,
-            202840
-        ],
-        "prerequisites": [
-            "CSE017"
         ]
     },
     {

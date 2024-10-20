@@ -21,6 +21,10 @@ class Graph:
         self.root.selected = True
         self.nodes = [self.root]
         self.size = 1
+        self.id_set = set()
+
+    def contains(self, data):
+        return data.courseID in self.id_set
 
     def find_parents(self, parent_data_list):
         parents = []
@@ -32,10 +36,16 @@ class Graph:
         return parents
 
     def add_node(self, data, parent_data_list=[]):
+        # Check if data already exists for some node. 
+        # If it does, then immediately return
+        if data.courseID in self.id_set:
+            return
         parents = self.find_parents(parent_data_list) if parent_data_list else []
         if parents == []:
             parents = [self.root]
         new_node = self.Node(data, parents)
+        self.id_set.add(data.courseID)
+        print(f"Added course {data.courseID} in graph.")
         for parent in parents:
             parent.add_child(new_node)
         self.nodes.append(new_node)

@@ -73,21 +73,19 @@ class CoursePlanner:
         self.course_graph = Graph()
         courses_to_schedule = self.courses
         for course in courses_to_schedule:
-            print(f"here1 adding {course.courseID}")
             self.add_course_as_node(course, courses_to_schedule)
 
     def add_course_as_node(self, course, courses_to_schedule):
+        if self.course_graph.contains(course):
+            return
         if course.prerequisites == []:
             self.course_graph.add_node(course)
-            print(f"Added course {course.courseID} in graph.")
             return
         else:
             print(f" course {course.courseID} has {len(course.prerequisites)} prereqs", flush=True)
-
             for prereq in course.prerequisites:
                 self.add_course_as_node(prereq, courses_to_schedule)
             self.course_graph.add_node(course, course.prerequisites)
-            print(f"Added course {course.courseID} in graph.")
 
     # Step 3 functions: Choose a schedule from the graph
 
@@ -126,6 +124,7 @@ class CoursePlanner:
     # Output
 
     def print_academic_plan(self):
+        print(self.semester_schedules)
         for i, semester in enumerate(self.semester_domain):
             print(f"\nSemester {semester}:")
             for course in self.semester_schedules[i]:
