@@ -98,6 +98,154 @@ def CSE_elective_calculation(taken_elective_courses, hss, free, science_tech, cs
 
     return hss, free, science_tech, cse_electives
 
+def build_tuple_list(remaining_courses, dummySubjects):
+    result = []
+
+    # Step 1: Iterate over remaining courses and fetch credits from the database
+    for course in remaining_courses:
+        curr.execute("SELECT credits FROM course WHERE courseid = %s", (course,))
+        course_info = curr.fetchone()
+
+        if course_info:
+            credits = course_info[0]  # Get the credits from the query result
+        else:
+            # If the course is not found in the database, assume a default of 3 credits
+            credits = 3
+
+        # Add the course and its credits to the result list
+        result.append({
+            "course": course,
+            "credits": credits
+        })
+
+    # Step 2: Add dummy subjects to the result list
+    result.extend(dummySubjects)
+
+    return result
+
+def make_dummy_subject(hss, free, science_tech, cse_electives, csb_electives):
+    dummy_subjects = []
+    subject_counter = {
+        'HSS': 1,
+        'FREE': 1,
+        'SCI_TECH': 1,
+        'CSE_ELEC': 1,
+        'CSB_ELEC': 1
+    }
+
+    # Helper function to generate subject names
+    def generate_subject_name(category):
+        count = subject_counter[category]
+        subject_counter[category] += 1
+        return f"{category}_{chr(64 + count)}"
+
+    # 1. HSS 처리 (4 크레딧으로 최대한 바인딩 후 남은 것은 3 크레딧으로)
+    while hss >= 4:
+        dummy_subjects.append({
+            "course": generate_subject_name("HSS"),
+            "credits": 4
+        })
+        hss -= 4
+    
+    if hss > 0:
+        dummy_subjects.append({
+            "course": generate_subject_name("HSS"),
+            "credits": 3
+        })
+        hss -= 3
+
+    # 2. FREE 처리 (모두 3 크레딧으로)
+    while free > 0:
+        dummy_subjects.append({
+            "course": generate_subject_name("FREE"),
+            "credits": 3
+        })
+        free -= 3
+
+    # 3. SCIENCE TECH 처리 (모두 3 크레딧으로)
+    while science_tech > 0:
+        dummy_subjects.append({
+            "course": generate_subject_name("SCI_TECH"),
+            "credits": 3
+        })
+        science_tech -= 3
+
+    # 4. CSE ELECTIVE 처리 (모두 3 크레딧으로)
+    while cse_electives > 0:
+        dummy_subjects.append({
+            "course": generate_subject_name("CSE_ELEC"),
+            "credits": 3
+        })
+        cse_electives -= 3
+
+    # 5. CSB ELECTIVE 처리 (모두 3 크레딧으로)
+    while csb_electives > 0:
+        dummy_subjects.append({
+            "course": generate_subject_name("CSB_ELEC"),
+            "credits": 3
+        })
+        csb_electives -= 3
+
+    return dummy_subjects
+
+def generate_course_json(final_remaining_courses, selected_semesters):
+    result = []
+
+    # Helper function to extract department
+    def extract_department(course_id):
+        # Extract department from course ID (e.g., CSE017 -> CSE)
+        return re.match(r"[A-Za-z]+", course_id).group() if re.match(r"[A-Za-z]+", course_id) else "UNKNOWN"
+
+    # Step: Process final remaining courses
+    for course_info in final_remaining_courses:
+        course_id = course_info["course"]
+        credits = course_info["credits"]
+        
+        # Set default title to course ID
+        title = course_id
+
+        # Extract department
+        department = extract_department(course_id)
+        
+        # Fetch semesters from course_semester table
+        curr.execute("SELECT semester FROM course_semester WHERE courseid = %s", (course_id,))
+        semesters_data = [row[0] for row in curr.fetchall()]
+
+        # Deduce future semesters based on the pattern and add upcoming semesters
+        all_semesters = set()
+        for semester in semesters_data:
+            year = int(semester[:4])
+            term_code = semester[-2:]
+            
+            # Add this semester and future semesters 4 years into the future
+            for i in range(0, 5):
+                future_year = year + i
+                future_semester = f"{future_year}{term_code}"
+                all_semesters.add(future_semester)
+
+        # Add selected upcoming semesters (e.g., 202510)
+        for sem in selected_semesters:
+            all_semesters.add(str(sem))
+
+        # Sort and convert to list
+        sorted_semesters = sorted(list(all_semesters))
+
+        # Create course JSON object
+        course_data = {
+            "courseID": course_id,
+            "department": department,
+            "number": ''.join(filter(str.isdigit, course_id)),
+            "title": title,
+            "credits": credits,
+            "attributes": [],
+            "semesters": sorted_semesters,
+            "prerequisites": [] 
+        }
+        result.append(course_data)
+
+    return result
+
+
 
 @app.route('/', methods=['POST'])
 def requirements_calculation():
@@ -172,9 +320,17 @@ def requirements_calculation():
         mock_data['hss'], mock_data['free'], mock_data['science_tech'], mock_data['cse_electives'], mock_data['csb_electives'] = CSB_elective_calculation(
             electives_taken, mock_data['hss'], mock_data['free'], mock_data['science_tech'], mock_data['cse_electives'], mock_data['csb_electives']
         )
-    # Debugging: print the response data
-    print("Response Data:", mock_data)
-    
+
+    # Generate dummy subjects for remaining requirements
+    mock_data['dummySubjects'] = make_dummy_subject(
+        mock_data['hss'], mock_data['free'], mock_data['science_tech'], mock_data['cse_electives'], mock_data['csb_electives']
+    )
+
+    # Build a list of tuples for the remaining courses and dummy subjects
+    final_remaining_courses = build_tuple_list(mock_data['remainingCourses'], mock_data['dummySubjects'])
+    final_json = generate_course_json(final_remaining_courses, [202510])
+    print("Final Remaining Courses:", final_json)
+
     return jsonify(mock_data)
 
 if __name__ == '__main__':
