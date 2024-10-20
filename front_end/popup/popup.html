@@ -13,10 +13,10 @@
             background-position: center;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* 위쪽부터 정렬되도록 수정 */
             height: 100vh;
             margin: 0;
-            overflow: hidden;
+            overflow: auto; /* 페이지 스크롤 가능 */
         }
         .header {
             position: absolute;
@@ -50,8 +50,11 @@
             text-align: center;
             width: 400px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            margin-top: 30px;
-            transition: all 0.3s ease;
+            margin-top: 50px; /* 헤더와 겹치지 않도록 약간의 여백 추가 */
+            overflow-y: auto; /* 컨테이너 내부 스크롤 가능 */
+            max-height: calc(100vh - 60px); /* 화면을 초과하지 않도록 높이 제한 */
+            min-height: 100px; /* 최소 높이 설정 */
+            transition: none; /* 애니메이션 효과 제거 */
         }
         .container.hidden {
             display: none;
@@ -74,20 +77,20 @@
             margin-bottom: 5px;
         }
         .input-group input, .input-group select {
-            width: 100%; /* 통일된 폭 설정 */
+            width: 100%;
             padding: 8px;
             border-radius: 5px;
             border: none;
             font-size: 14px;
             outline: none;
             margin-bottom: 10px;
-            font-family: 'Georgia', serif; /* 폰트 통일 */
+            font-family: 'Georgia', serif;
             color: #333;
-            box-sizing: border-box; /* 크기 통일 */
+            box-sizing: border-box;
         }
         .input-group input::placeholder {
-            font-family: 'Georgia', serif; /* 안내문구 폰트 통일 */
-            color: #888; /* 안내문구 색상 */
+            font-family: 'Georgia', serif;
+            color: #888;
         }
         .agree-btn, .submit-btn {
             background-color: #7B2E2E;
@@ -113,12 +116,20 @@
             display: inline-flex;
             align-items: center;
         }
-
         .tag .close {
             margin-left: 5px;
             cursor: pointer;
         }
-
+        /* 비활성화된 버튼 스타일 추가 */
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            border-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .submit-btn:disabled:hover {
+            transform: none;
+        }
     </style>
 </head>
 <body>
@@ -150,8 +161,13 @@
             <select id="end-semester">
             </select>
         </div>
-        
-        <button class="submit-btn" id="submitPreferences">Submit</button>
+        <button class="submit-btn" id="submitPreferences">Next</button>
+    </div>
+
+    <div id="term-setup-view" class="container hidden">
+        <h2>Select Credit Load for Each Semester</h2>
+        <div id="term-container"></div>
+        <button class="submit-btn" id="finalizeSchedule">Submit</button>
     </div>
 
     <script src="popup.js"></script> <!-- External JS 파일로 분리 -->
