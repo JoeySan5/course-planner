@@ -1,4 +1,4 @@
-// 전역 변수 및 함수 정의
+// Global variables and function definitions
 const allSemesters = [
     "2024-Spring", "2024-Fall",
     "2025-Spring", "2025-Fall",
@@ -7,6 +7,11 @@ const allSemesters = [
     "2028-Spring", "2028-Fall",
     "2029-Spring"
 ];
+
+// Load SheetJS library
+const script = document.createElement('script');
+script.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js";
+document.head.appendChild(script);
 
 function convertSemesterToNumber(semester) {
     const [year, term] = semester.split('-');
@@ -17,35 +22,35 @@ function convertSemesterToNumber(semester) {
 function fetchHTML() {
     console.log("fetchHTML function called");
 
-    // 전체 HTML 콘텐츠 가져오기
+    // Retrieve the entire HTML content
     const htmlContent = document.documentElement.outerHTML;
     console.log(htmlContent);
 
-    // HTML 구조에서 원하는 과목명 추출
+    // Parse the HTML structure to extract desired course names
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
 
-    // 'takenCourse'와 'takenCourse ip' 클래스 행들을 선택
+    // Select rows with 'takenCourse' and 'takenCourse ip' classes
     const takenCourses = doc.querySelectorAll('tr.takenCourse, tr.takenCourse.ip');
 
-    // 과목명을 저장할 Set (중복 제거)
+    // Store course names in a Set to remove duplicates
     let courseNamesSet = new Set();
 
-    // 각 행을 순회하며 과목명을 추출
+    // Iterate through each row and extract course names
     takenCourses.forEach((row) => {
         const courseTd = row.querySelector('td.course');
         if (courseTd) {
-            // 공백 제거 후 과목명 추가
+            // Remove spaces and add the course name
             const courseName = courseTd.textContent.trim().replace(/\s+/g, '');
             courseNamesSet.add(courseName);
         }
     });
 
-    // Set을 배열로 변환하여 콘솔에 출력
+    // Convert the Set to an array and log it to the console
     const courseNames = Array.from(courseNamesSet);
     console.log(courseNames);
 
-    // chrome runtime으로 과목명 데이터도 함께 전송
+    // Send the course name data along with HTML content via chrome runtime
     chrome.runtime.sendMessage({ html: htmlContent, courses: courseNames });
 }
 
@@ -135,9 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const endSemesterSelect = document.getElementById('end-semester');
     const nextButton = document.getElementById('submitPreferences');
     let extractedCourses = [];
-    let selectedMajor = ""; // 전역 변수로 선택된 전공 저장
+    let selectedMajor = ""; 
 
-    // 기존 크롤링 데이터 받기
     chrome.runtime.onMessage.addListener((request) => {
         if (request.courses) {
             extractedCourses = request.courses;
@@ -145,31 +149,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Goal Major 선택 시 Agree 버튼 활성화
     goalMajorSelect.addEventListener('change', () => {
         selectedMajor = goalMajorSelect.value;
 
         if (selectedMajor) {
-            agreeBtn.disabled = false; // 전공 선택 시 버튼 활성화
-            agreeBtn.classList.add('active'); // 버튼에 활성화 스타일 추가
+            agreeBtn.disabled = false; 
+            agreeBtn.classList.add('active'); 
         } else {
-            agreeBtn.disabled = true; // 전공 미선택 시 버튼 비활성화
-            agreeBtn.classList.remove('active'); // 버튼에서 활성화 스타일 제거
+            agreeBtn.disabled = true; 
+            agreeBtn.classList.remove('active'); 
         }
     });
 
-    // Agree 버튼 클릭 이벤트 - Goal Major 로직 포함
     agreeBtn.addEventListener('click', () => {
         // Goal Major 선택 여부 확인
         if (!selectedMajor) {
             alert("Please select your Goal Major.");
-            return; // Goal Major 선택하지 않으면 진행되지 않음
+            return; // If you don't select the major, the function will stop here.
         }
 
-        // 선택된 Goal Major 정보 출력 (추후 로직에 사용 가능)
         console.log("Selected Goal Major:", selectedMajor);
 
-        // 기존 로직: Agree 버튼 클릭 시 다음 화면으로 이동
+
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             chrome.scripting.executeScript({
                 target: { tabId: tabs[0].id },
@@ -188,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         questionnaireView.classList.remove('hidden');
     });
 
-    // 태그 입력 관련 코드
+    // tag input keypress event
     tagInput.addEventListener('keypress', function (event) {
         if (event.key === ' ' || event.key === 'Enter') {
             event.preventDefault();
@@ -216,12 +217,12 @@ document.addEventListener('DOMContentLoaded', () => {
         tagContainer.insertBefore(tag, tagInput);
     }
 
-    // 버튼 활성화 상태를 체크하는 함수
+    // check button state function
     function checkButtonState() {
         nextButton.disabled = !(startSemesterSelect.value && endSemesterSelect.value);
     }
 
-    // 초기 버튼 상태 설정
+    // initial button state check
     checkButtonState();
 
     startSemesterSelect.addEventListener('change', function () {
@@ -259,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     endSemesterSelect.addEventListener('change', checkButtonState);
 
-    // "Next" 버튼 클릭 이벤트
+    // "Next" click event
     nextButton.addEventListener('click', () => {
         const electives = Array.from(document.querySelectorAll('.tag')).map(tag => tag.textContent.trim());
         const startSemester = startSemesterSelect.value;
@@ -270,72 +271,94 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Submit 버튼의 이벤트 리스너 추가
+    // Submit button click event
     const submitButton = document.getElementById('finalizeSchedule');
     submitButton.addEventListener('click', function() {
-    const selectedCredits = {};
-    document.querySelectorAll('#term-container select').forEach(select => {
-        selectedCredits[select.name.replace('credits-', '')] = select.value;
+        const selectedCredits = {};
+        document.querySelectorAll('#term-container select').forEach(select => {
+            selectedCredits[select.name.replace('credits-', '')] = select.value;
+        });
+    
+        const finalData = {
+            goalMajor: selectedMajor,
+            takenCourses: extractedCourses,
+            startSemester: startSemesterSelect.value,
+            endSemester: endSemesterSelect.value,
+            selectedCredits: selectedCredits,
+            userPreferences: Array.from(document.querySelectorAll('.tag')).map(tag => tag.textContent.trim())
+        };
+    
+        console.log('Final Data:', JSON.stringify(finalData, null, 2));
+    
+        const analyzingPrompt = document.createElement('div');
+        analyzingPrompt.id = 'analyzing-prompt';
+        analyzingPrompt.style.position = 'fixed';
+        analyzingPrompt.style.top = '50%';
+        analyzingPrompt.style.left = '50%';
+        analyzingPrompt.style.transform = 'translate(-50%, -50%)';
+        analyzingPrompt.style.padding = '20px';
+        analyzingPrompt.style.backgroundColor = '#000';
+        analyzingPrompt.style.color = '#fff';
+        analyzingPrompt.style.borderRadius = '8px';
+        analyzingPrompt.style.boxShadow = '0 0 15px rgba(0,0,0,0.5)';
+        analyzingPrompt.style.fontSize = '18px';
+        analyzingPrompt.style.textAlign = 'center';
+        analyzingPrompt.textContent = 'Analyzing...';
+    
+        document.body.appendChild(analyzingPrompt);
+    
+        // Send data to the EC2 server
+        const ec2Url = 'http://127.0.0.1:5000'; // actual URL
+        fetch(ec2Url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(finalData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // get the json from the response
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            alert('Data successfully received from EC2');
+    
+            try {
+                // json to excel
+                const ws = XLSX.utils.json_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Results");
+    
+                const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                const blob = new Blob([wbout], { type: 'application/octet-stream' });
+    
+                // excel download
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'result.xlsx'; // filename
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (excelError) {
+                console.error('Error converting to Excel:', excelError);
+                alert('Failed to convert data to Excel format. Please check the response data.');
+            }
+    
+        })
+        .catch(error => {
+            console.error('Error sending data to EC2:', error);
+            alert('Failed to send data to EC2');
+        })
+        .finally(() => {
+            if (analyzingPrompt) {
+                analyzingPrompt.remove();
+            }
+        });
     });
-
-    // 모든 데이터를 JSON으로 정리
-    const finalData = {
-        goalMajor: selectedMajor,
-        takenCourses: extractedCourses,
-        startSemester: startSemesterSelect.value,
-        endSemester: endSemesterSelect.value,
-        selectedCredits: selectedCredits,
-        userPreferences: Array.from(document.querySelectorAll('.tag')).map(tag => tag.textContent.trim())
-    };
-
-    console.log('Final Data:', JSON.stringify(finalData, null, 2));
-
-    // "Analyzing..." 프롬프트 표시
-    const analyzingPrompt = document.createElement('div');
-    analyzingPrompt.id = 'analyzing-prompt';
-    analyzingPrompt.style.position = 'fixed';
-    analyzingPrompt.style.top = '50%';
-    analyzingPrompt.style.left = '50%';
-    analyzingPrompt.style.transform = 'translate(-50%, -50%)';
-    analyzingPrompt.style.padding = '20px';
-    analyzingPrompt.style.backgroundColor = '#000';
-    analyzingPrompt.style.color = '#fff';
-    analyzingPrompt.style.borderRadius = '8px';
-    analyzingPrompt.style.boxShadow = '0 0 15px rgba(0,0,0,0.5)';
-    analyzingPrompt.style.fontSize = '18px';
-    analyzingPrompt.style.textAlign = 'center';
-    analyzingPrompt.textContent = 'Analyzing...';
-
-    document.body.appendChild(analyzingPrompt);
-
-    // ec2 sending
-    const ec2Url = 'http://127.0.0.1:5000'; // acutal url
-    fetch(ec2Url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(finalData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-        alert('Data successfully sent to EC2');
-    })
-    .catch(error => {
-        console.error('Error sending data to EC2:', error);
-        alert('Failed to send data to EC2');
-    })
-    .finally(() => {
-        if (analyzingPrompt) {
-            analyzingPrompt.remove();
-        }
-    });
-});
-
 });

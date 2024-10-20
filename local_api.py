@@ -237,7 +237,7 @@ def generate_course_json(final_remaining_courses, selected_semesters):
         sorted_semesters = sorted(list(all_semesters))
 
         all_prereqs = set()
-         # Fetch prereqs from course_semester table
+        # Fetch prereqs from course_semester table
         curr.execute("SELECT * FROM prereq WHERE courseid = %s", (course_id,))
         prereqs = [(row[1],row[2]) for row in curr.fetchall()]
         if prereqs:
@@ -250,7 +250,7 @@ def generate_course_json(final_remaining_courses, selected_semesters):
                 else:
                     all_prereqs.add(prereq[1])
             
-            sorted_prereqs = sorted(list(all_prereqs))
+        sorted_prereqs = sorted(list(all_prereqs))
 
 
         # Create course JSON object
@@ -293,12 +293,13 @@ def add_courses_from_json(planner, courses_data):
     for course_data in courses_data:
         course = courses_dict[course_data["courseID"]]
         for prereq_id in course_data["prerequisites"]:
-            course.add_prerequisite(courses_dict[prereq_id])
+            if prereq_id in courses_dict:
+                course.add_prerequisite(courses_dict[prereq_id])
 
 def get_output_json_from_schedule(schedule):
     # Iterate through planner.course_schedule and build a 2D array
     course_schedule_json = []
-    for semester in planner.semester_schedules:
+    for semester in schedule:
         semester_courses = []
         for course in semester:
             # Assuming course is an object, you can extract its attributes
@@ -393,6 +394,11 @@ def requirements_calculation():
     final_remaining_courses = build_tuple_list(mock_data['remainingCourses'], mock_data['dummySubjects'])
     final_json = generate_course_json(final_remaining_courses, [202510])
     print("--------------------------------------") 
+    # # Specify the path to the output JSON file
+    # input_file_path = 'course-planner/final.json'  # Change this to your desired file path
+    # with open(input_file_path, 'w') as json_file:
+    #     json.dump(final_json, json_file, indent=4)  # indent for pretty printing
+    
     print("Final Remaining Courses:", final_json)
     start_semester = 202510
     end_semester = 202610
@@ -402,14 +408,12 @@ def requirements_calculation():
     add_courses_from_json(planner, final_json)
     planner.build_graph()
     out_json = get_output_json_from_schedule(planner.choose_schedule())
-    # Specify the path to the output JSON file
-    output_file_path = 'course-planner/final.json'  # Change this to your desired file path
 
+    output_file_path = 'course-planner/output-final.json'
     with open(output_file_path, 'w') as json_file:
         json.dump(final_json, json_file, indent=4)  # indent for pretty printing
-
-
-    return 
+        
+    return out_json
 
 def test():
     # Load courses from a JSON file
