@@ -123,17 +123,21 @@ function showTermSetupView(startSemester, endSemester) {
             document.body.style.display = 'none';
         }, 300); 
     });
-    document.addEventListener('DOMContentLoaded', () => {
-        const agreeBtn = document.getElementById('agreeBtn');
-        const tagInput = document.getElementById('electives');
-        const tagContainer = tagInput.parentNode;
-        const startSemesterSelect = document.getElementById('start-semester');
-        const graduationGroup = document.getElementById('graduation-group');
-        const endSemesterSelect = document.getElementById('end-semester');
-        const nextButton = document.getElementById('submitPreferences');
-        let extractedCourses = [];
 
-    // 크롤링한 데이터 받기
+
+document.addEventListener('DOMContentLoaded', () => {
+    const agreeBtn = document.getElementById('agreeBtn');
+    const goalMajorSelect = document.getElementById('goal-major');
+    const tagInput = document.getElementById('electives');
+    const tagContainer = tagInput.parentNode;
+    const startSemesterSelect = document.getElementById('start-semester');
+    const graduationGroup = document.getElementById('graduation-group');
+    const endSemesterSelect = document.getElementById('end-semester');
+    const nextButton = document.getElementById('submitPreferences');
+    let extractedCourses = [];
+    let selectedMajor = ""; // 전역 변수로 선택된 전공 저장
+
+    // 기존 크롤링 데이터 받기
     chrome.runtime.onMessage.addListener((request) => {
         if (request.courses) {
             extractedCourses = request.courses;
@@ -141,7 +145,31 @@ function showTermSetupView(startSemester, endSemester) {
         }
     });
 
+    // Goal Major 선택 시 Agree 버튼 활성화
+    goalMajorSelect.addEventListener('change', () => {
+        selectedMajor = goalMajorSelect.value;
+
+        if (selectedMajor) {
+            agreeBtn.disabled = false; // 전공 선택 시 버튼 활성화
+            agreeBtn.classList.add('active'); // 버튼에 활성화 스타일 추가
+        } else {
+            agreeBtn.disabled = true; // 전공 미선택 시 버튼 비활성화
+            agreeBtn.classList.remove('active'); // 버튼에서 활성화 스타일 제거
+        }
+    });
+
+    // Agree 버튼 클릭 이벤트 - Goal Major 로직 포함
     agreeBtn.addEventListener('click', () => {
+        // Goal Major 선택 여부 확인
+        if (!selectedMajor) {
+            alert("Please select your Goal Major.");
+            return; // Goal Major 선택하지 않으면 진행되지 않음
+        }
+
+        // 선택된 Goal Major 정보 출력 (추후 로직에 사용 가능)
+        console.log("Selected Goal Major:", selectedMajor);
+
+        // 기존 로직: Agree 버튼 클릭 시 다음 화면으로 이동
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             chrome.scripting.executeScript({
                 target: { tabId: tabs[0].id },
@@ -153,7 +181,6 @@ function showTermSetupView(startSemester, endSemester) {
             });
         });
 
-        // 기존 로직 유지
         const initialView = document.getElementById('initial-view');
         const questionnaireView = document.getElementById('questionnaire-view');
 
@@ -253,6 +280,7 @@ function showTermSetupView(startSemester, endSemester) {
 
     // 모든 데이터를 JSON으로 정리
     const finalData = {
+        goalMajor: selectedMajor,
         takenCourses: extractedCourses,
         startSemester: startSemesterSelect.value,
         endSemester: endSemesterSelect.value,
@@ -304,7 +332,6 @@ function showTermSetupView(startSemester, endSemester) {
         alert('Failed to send data to EC2');
     })
     .finally(() => {
-        // "Analyzing..." 프롬프트 제거
         if (analyzingPrompt) {
             analyzingPrompt.remove();
         }
