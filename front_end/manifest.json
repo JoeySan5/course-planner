@@ -14,12 +14,15 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://dw-prod.ec.lehigh.edu/responsiveDashboard*"],
+            "matches": ["https://degreeaudit.lehigh.edu:8445/selfservice-batch/audit/*"],
             "js": ["content.js"]
         }
     ],
+    "host_permissions": ["<all_urls>"],
     "permissions": [
-        "tabs"
+        "tabs",
+        "activeTab",
+        "scripting"
     ],
     "action": {
         "default_icon": "images/icon32.png",

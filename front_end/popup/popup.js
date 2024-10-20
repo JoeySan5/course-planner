@@ -14,6 +14,13 @@ function convertSemesterToNumber(semester) {
     return parseInt(year) * 2 + (termNumber - 1);
 }
 
+function fetchHTML() {
+    console.log("fetchHTML function called");
+    const htmlContent = document.documentElement.outerHTML;
+    console.log(htmlContent);
+    chrome.runtime.sendMessage({ html: htmlContent });
+}
+
 function showTermSetupView(startSemester, endSemester) {
     console.log("showTermSetupView called with:", startSemester, endSemester);
     
@@ -91,9 +98,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextButton = document.getElementById('submitPreferences');
 
     agreeBtn.addEventListener('click', () => {
+        // 현재 페이지 HTML 가져오기
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.scripting.executeScript({
+                target: { tabId: tabs[0].id },
+                func: fetchHTML
+            }, () => {
+                if (chrome.runtime.lastError) {
+                    console.error("Error executing script:", chrome.runtime.lastError);
+                }
+            });
+        });
+
+        // 기존 로직 유지
         const initialView = document.getElementById('initial-view');
         const questionnaireView = document.getElementById('questionnaire-view');
-        
+
         initialView.classList.add('hidden');
         questionnaireView.classList.remove('hidden');
     });
