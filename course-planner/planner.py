@@ -91,21 +91,24 @@ class CoursePlanner:
 
     def choose_schedule(self):
         for semester in self.semester_domain:
+            print(f"Choosing schedule for semester {semester}")
             self.choose_schedule_for_semester(semester)
         return self.semester_schedules
 
     def choose_schedule_for_semester(self, semester):
         # Find not-yet-selected courses offered this semester
         courses_for_semester = [node for node in self.course_graph.nodes if (not node.selected and node.data.offered_in_semester(semester))]
-        # Filter out courses with unmet-prerequisites
+        # Filter out courses with unmet prerequisites
         for course_node in courses_for_semester:
             if course_node.parents is not None:
                 for prereq in course_node.parents:
                     if not prereq.selected:
                         courses_for_semester.remove(course_node)
+
+        print(courses_for_semester)
         
         # Sort courses by height
-        courses_for_semester.sort(key=lambda course: self.graph.height_heuristic(course), reverse=True)
+        courses_for_semester.sort(key=lambda course: self.course_graph.height_heuristic(course), reverse=True)
         #  TODO: Use better heuristic for sorting courses
 
         # Add courses to the schedule
@@ -115,7 +118,7 @@ class CoursePlanner:
             course = course_node.data
             if credits + course.credits <= self.max_credits_per_semester:
                 schedule.append(course)
-                self.graph.select_node(course_node)
+                self.course_graph.select_node(course_node)
                 credits += course.credits
                 if credits == self.max_credits_per_semester:
                     break
@@ -126,7 +129,7 @@ class CoursePlanner:
     def print_academic_plan(self):
         print(self.semester_schedules)
         for i, semester in enumerate(self.semester_domain):
-            print(f"\nSemester {semester}:")
+            print(f"\n-----Semester {semester}-----")
             for course in self.semester_schedules[i]:
                 print(course)
 
@@ -171,6 +174,9 @@ def main():
     planner.build_graph()
 
     print("done building")
+
+    planner.choose_schedule()
+
 
     planner.print_academic_plan()
 
