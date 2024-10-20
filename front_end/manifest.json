@@ -19,8 +19,7 @@
         }
     ],
     "permissions": [
-        "tabs",
-        "action"
+        "tabs"
     ],
     "action": {
         "default_icon": "images/icon32.png",
