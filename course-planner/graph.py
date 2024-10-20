@@ -71,9 +71,14 @@ class Graph:
     
     def children_heuristic(self, node):
         return len(node.children)
+
+    def semesters_remaining_heuristic(self, node, semesters):
+        course = node.data
+        num_sems = len([semester for semester in semesters if course.offered_in_semester(semester)])
+        return 10 / num_sems if num_sems > 0 else 0
     
-    def super_heuristic(self, node):
-        return self.height_heuristic(node) + self.children_heuristic(node)
+    def super_heuristic(self, node, semesters):
+        return self.height_heuristic(node) + self.children_heuristic(node) + self.semesters_remaining_heuristic(node, semesters)
     
     # TODO: implement this heuristic
     # def subtree_heuristic(self, node):
