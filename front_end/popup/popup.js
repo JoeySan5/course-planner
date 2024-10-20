@@ -309,12 +309,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(analyzingPrompt);
 
     // ec2 sending
-    const ec2Url = 'http://172.31.32.189:5000/api'; // acutal url
+    const ec2Url = 'http://127.0.0.1:5000'; // acutal url
     fetch(ec2Url, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
+        body: JSON.stringify(finalData)
     })
     .then(response => {
         if (!response.ok) {
