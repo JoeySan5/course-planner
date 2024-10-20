@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import psycopg2
 import re
 import json
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -213,15 +214,17 @@ def generate_course_json(final_remaining_courses, selected_semesters):
 
         # Deduce future semesters based on the pattern and add upcoming semesters
         all_semesters = set()
+        current_year = datetime.now().year
         for semester in semesters_data:
             year = int(semester[:4])
             term_code = semester[-2:]
             
-            # Add this semester and future semesters 4 years into the future
+            # Add this semester and future semesters up to 4 years from the current year
             for i in range(0, 5):
                 future_year = year + i
-                future_semester = f"{future_year}{term_code}"
-                all_semesters.add(future_semester)
+                if future_year <= current_year + 4:  # Limit to 4 years from now
+                    future_semester = f"{future_year}{term_code}"
+                    all_semesters.add(future_semester)
 
         # Add selected upcoming semesters (e.g., 202510)
         for sem in selected_semesters:
@@ -239,7 +242,7 @@ def generate_course_json(final_remaining_courses, selected_semesters):
             "credits": credits,
             "attributes": [],
             "semesters": sorted_semesters,
-            "prerequisites": [] 
+            "prerequisites": [] #TODO
         }
         result.append(course_data)
 
@@ -329,9 +332,10 @@ def requirements_calculation():
     # Build a list of tuples for the remaining courses and dummy subjects
     final_remaining_courses = build_tuple_list(mock_data['remainingCourses'], mock_data['dummySubjects'])
     final_json = generate_course_json(final_remaining_courses, [202510])
+    print("--------------------------------------") 
     print("Final Remaining Courses:", final_json)
 
-    return jsonify(mock_data)
+    return 
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)
