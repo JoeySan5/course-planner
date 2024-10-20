@@ -18,6 +18,14 @@
             margin: 0;
             overflow: auto; /* 페이지 스크롤 가능 */
         }
+        body, .container {
+            overflow: auto; /* 스크롤 기능 유지 */
+        }
+
+        body::-webkit-scrollbar, .container::-webkit-scrollbar {
+            width: 0px; /* 스크롤바 너비를 0으로 설정하여 숨기기 */
+            height: 0px; /* 가로 스크롤바 높이도 0으로 설정 */
+        }
         .header {
             position: absolute;
             top: 0;

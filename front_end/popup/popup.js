@@ -52,6 +52,9 @@ function showTermSetupView(startSemester, endSemester) {
                 const option = document.createElement('option');
                 option.value = i;
                 option.textContent = i;
+                if (i === 18) {
+                    option.selected = true;
+                }
                 select.appendChild(option);
             }
 
