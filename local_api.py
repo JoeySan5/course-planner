@@ -351,6 +351,12 @@ def requirements_calculation():
     final_json = generate_course_json(final_remaining_courses, [202510])
     print("--------------------------------------") 
     print("Final Remaining Courses:", final_json)
+    # Specify the path to the output JSON file
+    output_file_path = 'course-planner/final.json'  # Change this to your desired file path
+
+    with open(output_file_path, 'w') as json_file:
+        json.dump(final_json, json_file, indent=4)  # indent for pretty printing
+
 
     return 
 
