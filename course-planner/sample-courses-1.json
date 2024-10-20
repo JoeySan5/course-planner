@@ -257,5 +257,73 @@
             202610
         ],
         "prerequisites": []
+    },
+    {
+        "courseID": "CSE241",
+        "department": "CSE",
+        "number": "241",
+        "title": "Database Systems and Applications",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE017"
+        ]
+    },
+    {
+        "courseID": "CSE252",
+        "department": "CSE",
+        "number": "252",
+        "title": "Computing Ethics",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": []
+    },
+    {
+        "courseID": "CSE262",
+        "department": "CSE",
+        "number": "262",
+        "title": "Programming Languages",
+        "credits": 3,
+        "attributes": [],
+        "semesters": [
+            202410,
+            202440,
+            202510,
+            202540,
+            202610,
+            202640,
+            202710,
+            202740,
+            202810,
+            202840
+        ],
+        "prerequisites": [
+            "CSE017"
+        ]
     }
+
 ]
