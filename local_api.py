@@ -3,6 +3,7 @@ import psycopg2
 import re
 import json
 from datetime import datetime
+from planner_copy import CoursePlanner, Course, Graph
 
 app = Flask(__name__)
 
@@ -265,6 +266,46 @@ def generate_course_json(final_remaining_courses, selected_semesters):
 
     return result
 
+def add_courses_from_json(planner, courses_data):
+    # Planner should already be initialized with semester & credit ranges
+
+    # Create a dictionary to store Course objects by courseID
+    courses_dict = {}
+
+    # First pass: Create Course objects without prerequisites
+    for course_data in courses_data:
+        course = Course(
+            courseID=course_data["courseID"],
+            department=course_data["department"],
+            number=course_data["number"],
+            title=course_data["title"],
+            credits=course_data["credits"],
+            attributes=course_data["attributes"],
+            semesters=course_data["semesters"],
+            prerequisites=[]  # We'll add prerequisites in the second pass
+        )
+        courses_dict[course.courseID] = course
+        planner.add_course(course)
+
+    # Second pass: Add prerequisites to Course objects
+    for course_data in courses_data:
+        course = courses_dict[course_data["courseID"]]
+        for prereq_id in course_data["prerequisites"]:
+            course.add_prerequisite(courses_dict[prereq_id])
+
+def get_output_json_from_schedule(schedule):
+    # Iterate through planner.course_schedule and build a 2D array
+    course_schedule_json = []
+    for semester in planner.semester_schedules:
+        semester_courses = []
+        for course in semester:
+            # Assuming course is an object, you can extract its attributes
+            semester_courses.append({
+                "courseID": course.courseID,
+                "department": course.department,
+            })
+        course_schedule_json.append(semester_courses)
+    return jsonify(course_schedule_json)
 
 
 @app.route('/', methods=['POST'])
@@ -351,6 +392,14 @@ def requirements_calculation():
     final_json = generate_course_json(final_remaining_courses, [202510])
     print("--------------------------------------") 
     print("Final Remaining Courses:", final_json)
+    start_semester = 202510
+    end_semester = 202610
+    MIN_CREDITS = 12
+    MAX_CREDITS = 18
+    planner = CoursePlanner(start_semester, end_semester, min_credits_per_semester=MIN_CREDITS, max_credits_per_semester=MAX_CREDITS)
+    add_courses_from_json(planner, final_json)
+    planner.build_graph()
+    out_json = get_output_json_from_schedule(planner.choose_schedule())
     # Specify the path to the output JSON file
     output_file_path = 'course-planner/final.json'  # Change this to your desired file path
 
