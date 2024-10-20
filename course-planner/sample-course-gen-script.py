@@ -14,6 +14,7 @@ def get_course_input():
         credits = int(credits)
     
     # Generate courseID
+
     courseID = f"{department}{number}"
     
     # Process prerequisites
@@ -85,7 +86,18 @@ def read_courses_from_file(filename):
     
     return courses
 
+
 def main():
+#     courses = []
+    
+#     while True:
+#         course = get_course_input()
+#         courses.append(course)
+        
+#         more_courses = input("Do you want to add another course? (yes/no): ").strip().lower()
+#         if more_courses != 'yes':
+#             break
+  
     # courses = []
     # Read courses from the file
     courses = read_courses_from_file('cse-catalog')
@@ -103,7 +115,6 @@ def main():
     
     print("Courses have been saved to user-input-courses.json")
 
-    
 
 if __name__ == "__main__":
     main()

@@ -99,7 +99,7 @@ class CoursePlanner:
         courses_for_semester = [node for node in self.course_graph.nodes if (not node.selected and node.data.offered_in_semester(semester) and self.course_graph.all_predecessors_selected(node))]
         
         # Sort courses by height
-        courses_for_semester.sort(key=lambda course: self.course_graph.super_heuristic(course), reverse=True)
+        courses_for_semester.sort(key=lambda course: self.course_graph.super_heuristic(course, self.semester_domain), reverse=True)
         #  TODO: Use better heuristic for sorting courses
 
         # Add courses to the schedule
