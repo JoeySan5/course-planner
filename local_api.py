@@ -233,6 +233,23 @@ def generate_course_json(final_remaining_courses, selected_semesters):
         # Sort and convert to list
         sorted_semesters = sorted(list(all_semesters))
 
+        all_prereqs = set()
+         # Fetch prereqs from course_semester table
+        curr.execute("SELECT * FROM prereq WHERE courseid = %s", (course_id,))
+        prereqs = [(row[1],row[2]) for row in curr.fetchall()]
+        if prereqs:
+            groupNum = prereqs[0][0]
+            all_prereqs.add(prereqs[0][1])
+            for prereq in prereqs:
+                currGroupNum = prereq[0]
+                if currGroupNum == groupNum:
+                    continue
+                else:
+                    all_prereqs.add(prereq[1])
+            
+            sorted_prereqs = sorted(list(all_prereqs))
+
+
         # Create course JSON object
         course_data = {
             "courseID": course_id,
@@ -242,7 +259,7 @@ def generate_course_json(final_remaining_courses, selected_semesters):
             "credits": credits,
             "attributes": [],
             "semesters": sorted_semesters,
-            "prerequisites": [] #TODO
+            "prerequisites": sorted_prereqs  #TODO
         }
         result.append(course_data)
 
@@ -334,6 +351,12 @@ def requirements_calculation():
     final_json = generate_course_json(final_remaining_courses, [202510])
     print("--------------------------------------") 
     print("Final Remaining Courses:", final_json)
+    # Specify the path to the output JSON file
+    output_file_path = 'course-planner/final.json'  # Change this to your desired file path
+
+    with open(output_file_path, 'w') as json_file:
+        json.dump(final_json, json_file, indent=4)  # indent for pretty printing
+
 
     return 
 
